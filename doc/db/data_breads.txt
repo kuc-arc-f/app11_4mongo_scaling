@@ -1,0 +1,22 @@
+db.category.insertMany([
+  { name: "食パン" },
+  { name: "調理パン"},
+  { name: "通常品"},
+  { name: "その他"},
+]);
+
+@@
+db.type.insertMany([
+  { name: "hight-price" },
+  { name: "normal-price"},
+  { name: "low-price"},
+]);
+@@
+db.tags.insertMany([
+  { name: "年末品" },
+  { name: "お盆向け"},
+  { name: "正月向け"},
+]);
+
+@@
+

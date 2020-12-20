@@ -1,0 +1,50 @@
+<div id="app">
+    <h1>Bread add</h1>
+    <hr />
+    <form action="/breads/add" method="post">
+        <div class="col-sm-6 form-control">
+            <label>Name :</label>
+            <input type="text" name="name" required />
+        </div>
+        <hr />        
+        <div class="col-sm-6 form-control">
+            <label>Category:</label>
+            <select class="form-control" name="category_id">
+                <!-- <option value="0">select please</option> -->
+                <% categories.forEach(function(item){ %>
+                    <option value="<%= item._id %>"><%= item.name  %>
+                    </option>
+                <% }) %>
+            </select>
+        </div>
+        <div class="col-sm-6 form-control mt-2">
+            <label>type:</label>
+            <select class="form-control" name="type_id">
+                <% types.forEach(function(item){ %>
+                    <option value="<%= item._id %>"><%= item.name  %>
+                    </option>
+                <% }) %>
+            </select>
+        </div>
+        <div class="col-sm-6 form-control mt-2">
+            <label>tags:</label>
+            <select class="form-control" name="tag_id">
+                <% tags.forEach(function(item){ %>
+                    <option value="<%= item._id %>"><%= item.name  %>
+                    </option>
+                <% }) %>
+            </select>
+        </div>
+        <div class="col-sm-6 form-control mt-2">
+            <div class="col-sm-6 form-control">
+                <label>Price :</label>
+                <input type="number" name="price" required />
+            </div>
+        </div>
+        <hr />
+        <div>
+            <input type="submit" value="Save"/>
+        </div>
+    </form>    
+</div>
+

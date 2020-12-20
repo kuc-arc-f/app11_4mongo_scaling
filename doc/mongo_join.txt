@@ -1,0 +1,154 @@
+
+mongo v3.6.3
+@@
+db.books.insertMany([
+  { code: "0101", name: "book-1", price: 120 },
+  { code: "0102", name: "book-2", price: 130  },
+  { code: "0201", name: "book-3", price: 180  },
+]);
+db.books.find();
+db.orders.find();
+db.order_users.find();
+@@
+db.order_users.insertMany([
+  { code: "1", name: "hoge taro"},
+  { code: "2", name: "huga taro"},
+]);
+@@
+    db.fruits.insertMany([
+    { code: "0101", name: "apple", price: 120, instock: 10 },
+    { code: "0102", name: "pear", price: 130, instock: 12 },
+    ]);
+@@
+    db.orders.insertMany([
+    { book_code: "0101", quantity: 2 },
+    { book_code: "0102", quantity: 6 }
+    ]);
+db.orders.insertMany([
+  { book_code: "0101", order_user_code: "1", quantity: 2 },
+  { book_code: "0102", order_user_code: "2", quantity: 6 }
+]);
+@@
+db.orders.insertMany([
+  { book_id: "0101", order_user_code: "1", quantity: 2 },
+]);
+
+@@ 
+{ $match: { book_code: '0101' } },
+@@
+db.orders.aggregate([
+    { $match: { book_code: '0101' } },
+    { $lookup:
+        {
+            from:"books",
+            localField:"book_code",
+            foreignField:"code",
+            as:"book"
+        },
+    },
+]);
+@@
+{ $match: { book_code: '0101' } },
+@@
+db.orders.aggregate([
+    { $lookup:
+        {
+            from:"books",
+            localField:"book_code",
+            foreignField:"code",
+            as:"book"
+        },
+    },
+    { $lookup:
+        {
+            from:"order_users",
+            localField:"order_user_code",
+            foreignField:"code",
+            as:"user"
+        },
+    },    
+]);
+@@ Id
+db.orders.aggregate([
+    { $lookup:
+        {
+            from:"books",
+            localField:"book_id",
+            foreignField:"_id",
+            as:"book"
+        },
+    },
+]);
+@@ group
+db.bread_orders.aggregate(
+{
+    $group : { _id: "$bread_id", total : { $sum : 1 }}
+});
+
+db.breads.aggregate(
+{
+    $group : { _id: "$category_id", total : { $sum : 1 }}
+});
+@@
+db.breads.aggregate(
+{
+    $group : { _id: "$category_id" }
+});
+@@
+db.book_groups.find();
+    db.book_groups.insertMany([
+        { dept_id: "01", name: "group-1" },
+        { dept_id: "01", name: "group-2" },
+        { dept_id: "02", name: "group-1" },
+    ]);
+db.book_groups.insertMany([
+	{ dept_name: "dept-1", name: "group-1" },
+	{ dept_name: "dept-1", name: "group-2" },
+	{ dept_name: "dept-2", name: "group-11" },
+]);
+
+@@
+db.book_groups.aggregate(
+{
+    $group : { _id: "$dept_name" }
+});
+
+db.book_groups.aggregate(
+{
+    $group : { _id: "$dept_name", total : { $sum : 1 } }
+});
+
+@@ test_orders
+db.test_orders.find();
+    db.test_orders.insertMany([
+    { datetime: ISODate("2017-12-15T12:00:00+09:00"), item: "pen", amount: 70 },
+    { datetime: ISODate("2017-12-15T12:00:00+09:00"), item: "note", amount: 40 },
+    { datetime: ISODate("2017-12-15T12:00:00+09:00"), item: "eraser", amount: 100 },
+    { datetime: ISODate("2017-12-12T12:00:00+09:00"), item: "note", amount: 80 },
+    { datetime: ISODate("2017-12-08T12:00:00+09:00"), item: "eraser", amount: 50 },
+    { datetime: ISODate("2017-11-21T12:00:00+09:00"), item: "eraser", amount: 70 },
+    { datetime: ISODate("2017-11-13T12:00:00+09:00"), item: "pen", amount: 20 },
+    { datetime: ISODate("2017-11-02T12:00:00+09:00"), item: "pen", amount: 40 },
+    { datetime: ISODate("2017-10-23T12:00:00+09:00"), item: "pen", amount: 30 },
+    { datetime: ISODate("2017-10-18T12:00:00+09:00"), item: "pen", amount: 10 }
+    ]);
+@@
+db.test_orders.insertMany([
+	{ dept_name: "dept-1", name: "group-1" , num: 11 },
+	{ dept_name: "dept-1", name: "group-2" , num: 22 },
+	{ dept_name: "dept-2", name: "group-12" , num: 1 },
+]);
+@@
+db.test_orders.aggregate(
+{
+   $group : { _id: "$dept_name", total : { $sum : "$num" } }
+});
+@@ export / import
+@@
+mongoexport --db db1 --collection orders --out ./orders.json
+mongoexport --db db1 --collection bread_orders --out ./bread_orders.json
+mongoexport --db db1 --collection breads --out ./breads.json
+
+@@
+mongoimport --db db1 --collection bread_orders --file ./bread_orders.json
+

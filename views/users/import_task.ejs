@@ -1,0 +1,79 @@
+<br />
+<div id="app"></div>
+
+
+<!-- -->
+<script type="text/babel">
+
+class ImportTask extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {data: '' }
+    }
+    componentDidMount(){
+        var self = this
+        window.addEventListener("load", function() {
+            window.document.getElementById("file1").addEventListener("change", function() {
+                //console.log("#-change")
+                self.change_proc()
+            });
+        });        
+    }
+    change_proc(){
+        console.log("#-change_proc")
+        var self = this
+        var files = window.document.getElementById('file1').files;
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            console.log("i: " + i );                
+            console.log("Name: " + file.name);
+            console.log("Size: " + file.size);
+            console.log("Type: " + file.type);
+            console.log("Date: " + file.lastModified);
+            console.log("Date: " + file.lastModifiedDate);
+            
+            var reader = new FileReader();
+            reader.onload = async function(evt) {
+                console.log("State: " + evt.target.readyState);
+                var result =evt.target.result;
+//console.log( result )
+                self.send_post(result)
+            };
+            reader.onerror = function(evt) {
+                console.log(evt.target.error.name);
+            };
+            reader.readAsText(file, "utf-8");             
+        }          
+    }
+    async send_post(json){
+        var task = {
+            data: json,
+        }
+        axios.post('/api_sorted_tasks/file_receive' , task ).then(res => {
+                console.log(res.data.ret );
+                if(res.data.ret !=null && parseInt(res.data.ret) == 1
+                ){
+                    alert("Success, import task")
+                }
+//                window.location.href = "/sorted_tasks"
+        });
+    }    
+    render(){
+        return (
+        <div className="container">
+            <hr className="mt-2 mb-2" />
+            <h3 className="mt-2">Tasks- import:</h3>
+            <hr />
+            <p>select , json file</p>            
+            <div>
+                <input type="file" id="file1" className="btn btn-outline-primary" />
+            </div>
+            <br /> 
+            <p>※連続でファイルを読み込む場合、再読み込みして下さい。</p>               
+        
+        </div>
+        )        
+    }
+}
+ReactDOM.render(<ImportTask id=""  />, document.getElementById('app'));
+</script>

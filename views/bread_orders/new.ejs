@@ -1,0 +1,25 @@
+<div id="app">
+    <h1>BreadOrders - add</h1>
+    <hr />
+    <form action="/bread_orders/add" method="post">
+        <div class="col-sm-6 form-control">
+            <label>breads:</label>
+            <select class="form-control" name="bread_id">
+                <!-- <option value="0">select please</option> -->
+                <% breads.forEach(function(item){ %>
+                    <option value="<%= item._id %>"><%= item.name  %>
+                    </option>
+                <% }) %>
+            </select>
+        </div>
+        <div class="col-sm-6 form-control">
+            <label>Num :</label>
+            <input type="number" name="order_num" required />
+        </div>
+        <hr />
+        <div>
+            <input type="submit" value="Save"/>
+        </div>
+    </form>    
+</div>
+

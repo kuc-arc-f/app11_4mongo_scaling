@@ -1,0 +1,69 @@
+
+<h1>BreadOrder - Show</h1>
+<hr />
+<div id="app"></div>
+
+<!-- -->
+<script type="text/babel">
+
+class Show extends React.Component {
+    constructor(props) {
+        super(props);
+//        this.state = {data: '' , bread:''}
+        this.state = {
+            data: '' , bread:'', bread_order: '',
+            category:'', type:'',tag:''
+        }
+        this.id = props.id
+console.log(this.id)
+    }
+    componentDidMount(){
+        this.get_item( this.id )        
+    }
+    async get_item(id){
+        axios.get("/api_bread_orders/show/" + id ).then(res =>  {
+            var dat = res.data
+console.log( dat)
+//console.log( dat.bread )
+            if(dat.bread.length > 0){
+                this.setState({ 
+                    bread_order: dat.bread_order,
+                    bread: dat.bread[0] ,
+                    category: dat.bread[0].categories[0],
+                    type: dat.bread[0].types[0],
+                    tag: dat.bread[0].tags[0],
+                });            
+            }else{
+                this.setState({ 
+                    bread_order: dat.bread_order,
+                });            
+            }
+//console.log( this.state.tag.name )
+        })        
+    }    
+    render(){
+        return (
+            <div>
+                <h1>ID : {this.state.bread_order._id}</h1>
+                <div>num : {this.state.bread_order.order_num}</div>
+                Date: {this.state.bread_order.created_at}
+                <hr />
+                <div>bread:  {this.state.bread.name}</div>
+                <hr />
+                <h3>Releated Data:</h3>
+                <div>Category:  {this.state.category.name}</div>
+                <div>Type:  {this.state.type.name}</div>
+                <div>Tag: {this.state.tag.name}</div>
+                <hr />
+                <form action="/bread_orders/delete" method="post">
+                    <div>
+                        <input type="hidden" name="id" value={this.state.bread_order._id} required />
+                        <input type="submit" value="Delete" />
+                    </div>
+                </form>                
+            </div>
+        )
+    }
+}
+ReactDOM.render(<Show id="<%= params_id %>"  />, document.getElementById('app'));
+</script>

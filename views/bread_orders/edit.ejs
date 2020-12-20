@@ -1,0 +1,33 @@
+<div id="app">
+    <h1>Task edit</h1>
+    <hr />
+    <form action="/tasks/update" method="post">
+        <div>
+            <input type="hidden" name="id" size="30" maxlength="40"
+            value="<%= task._id %>" required>
+            <p>
+                <label>title :
+                <input type="text" name="title" size="30" maxlength="40"
+                value="<%= task.title %>" required>
+                </label>
+            </p>
+        </div>
+        <div>
+            <label>content :</label>
+            <input type="text" name="content" 
+            value="<%= task.content %>" required />
+        </div>
+        <div>
+            <input type="submit" value="Save"/>
+        </div>
+    </form>    
+    <hr />
+    <form action="/tasks/delete" method="post">
+        <div>
+            <input type="hidden" name="id" value="<%= task._id %>" required>                
+            <input type="submit" value="Delete"/>
+        </div>
+    </form>
+</div>
+
+

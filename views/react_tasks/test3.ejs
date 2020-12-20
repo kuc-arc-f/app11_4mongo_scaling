@@ -1,0 +1,59 @@
+
+<br />
+<a href="/tasks/new">[ new ] </a>
+<hr />
+<!-- <div id="app"></div> -->
+
+<div class="tasks_index_wrap">
+    <h3>WASM task - index</h3>
+    <hr />
+    <ul id="ul_post_wrap">
+    </ul>
+</div>
+
+<!-- -->
+<script src='/pkg/wasm_react_cms.js'></script>
+<script>
+//wasm
+const { wasm_put_item } = wasm_bindgen;
+/*
+async function wasm_react_cms_run() {
+    await wasm_bindgen('/pkg/wasm_react_cms_bg.wasm');
+}
+*/
+var task_items = [];
+
+var TaskIndex = {
+    get_items: async function(){
+        await axios.get("/api/tasks_index").then(res =>  {
+            task_items = res.data.docs
+        })
+        this.dispRow();
+    },
+    dispRow:async function(){
+        await wasm_bindgen('/pkg/wasm_react_cms_bg.wasm');
+        if(task_items instanceof Array){
+//            console.log(task_items );
+            task_items.map(function(object, index){
+                wasm_put_item("ul_post_wrap", String(object.title), String(object.id));
+            })
+        }
+    },
+}
+//
+$(function(){
+    TaskIndex.get_items();
+});
+</script>
+<!-- -->
+<style>
+.tasks_index_wrap .div_post_wrap{
+    padding : 8px;
+}
+.div_post_wrap hr{
+  height: 1px;
+  background-color: #000;
+  border: none;
+  margin-bottom : 0px;
+}
+</style>

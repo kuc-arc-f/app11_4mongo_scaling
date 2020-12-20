@@ -1,0 +1,41 @@
+
+<h1>SortedShow</h1>
+<hr />
+<div id="app"></div>
+
+<!-- -->
+<script type="text/babel">
+
+class Show extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {data: '' }
+//        this.id = parseInt(props.id)
+        this.id = props.id
+console.log(this.id)
+//        this.db = null
+    }
+    componentDidMount(){
+        this.get_item( this.id )        
+    }
+    async get_item(id){
+        axios.get("/api_sorted_tasks/tasks_show/" + id ).then(res =>  {
+            var dat = res.data.docs
+console.log( dat )
+            this.setState({ 
+                data: dat,
+            });            
+//console.log( this.state.data.title )
+        })        
+    }    
+    render(){
+        return (
+            <div>
+                <h1>title : {this.state.data.title}</h1>
+                <div>{this.state.data.content}</div>
+            </div>
+        )
+    }
+}
+ReactDOM.render(<Show id="<%= params_id %>"  />, document.getElementById('app'));
+</script>

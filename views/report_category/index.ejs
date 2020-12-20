@@ -1,0 +1,64 @@
+<br />
+<div class="row">
+</div>
+<hr />
+<div id="app"></div>
+
+<!-- -->
+<script type="text/babel" src="/js/component/ReportCategory/IndexRow.js" ></script>
+<script type="text/babel">
+var PAGE = <%= page %>;
+//
+class List extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {data: '', item_count:0, paginate_disp:0 }
+        this.db = null
+    }
+    componentDidMount(){
+        console.log("PAGE:", PAGE)
+        this.get_items(PAGE);
+    }
+    get_items(PAGE){
+        axios.get("/api_report_category/index?page=" +PAGE).then(res =>  {
+            var data = res.data
+            var items = data.docs
+            var item_count = data.page_item.item_count
+            var paginate_disp = data.page_item.paginate_disp;
+console.log( items );
+            var arr =[];
+            this.setState({ 
+                data: items ,item_count:item_count ,paginate_disp: paginate_disp
+            })
+        })
+    }    
+    tabRow(){
+        if(this.state.data instanceof Array){
+            return this.state.data.map(function(object, index){
+//console.log(object.book[0] );
+                return <IndexRow obj={object} key={index} />
+            })
+        }
+    }
+    render(){
+        return (
+            <div>
+                <h1>ReportCategory</h1>
+                <table className="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Category / Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {this.tabRow()}
+                    </tbody>
+                </table> 
+                <hr />
+                <br /><br />           
+            </div>
+        )
+    }
+}
+ReactDOM.render(<List />, document.getElementById('app'));
+</script>

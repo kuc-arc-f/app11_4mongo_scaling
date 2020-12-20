@@ -1,0 +1,29 @@
+{
+  "name": "app11",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon --exec babel-node ./bin/www"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "cookie-parser": "~1.4.4",
+    "csrf": "^3.1.0",
+    "debug": "~2.6.9",
+    "ejs": "^2.6.2",
+    "express": "~4.16.1",
+    "express-ejs-layouts": "^2.5.0",
+    "express-flash": "0.0.2",
+    "express-session": "^1.17.1",
+    "http-errors": "~1.6.3",
+    "moment": "^2.29.1",
+    "mongodb": "^3.6.3",
+    "morgan": "~1.9.0",
+    "nodemon": "^2.0.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.1",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.11.0"
+  }
+}

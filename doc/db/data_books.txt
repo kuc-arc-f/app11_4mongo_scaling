@@ -1,0 +1,7 @@
+db.books.insertMany([
+  { code: "0101", name: "book-1", price: 120 },
+  { code: "0102", name: "book-2", price: 130  },
+  { code: "0201", name: "book-3", price: 180  },
+]);
+@@
+

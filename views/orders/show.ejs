@@ -1,0 +1,50 @@
+
+<h1>Order - Show</h1>
+<hr />
+<div id="app"></div>
+
+<!-- -->
+<script type="text/babel">
+
+class Show extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {data: '' , book:''}
+        this.id = props.id
+console.log(this.id)
+    }
+    componentDidMount(){
+        this.get_item( this.id )        
+    }
+    async get_item(id){
+        axios.get("/api_orders/show/" + id ).then(res =>  {
+            var dat = res.data.docs
+// console.log( dat.book[0] )
+            this.setState({ 
+                data: dat,
+                book: dat.book[0],
+            });            
+//console.log( this.state.data.title )
+        })        
+    }    
+    render(){
+        return (
+            <div>
+                <h1>ID : {this.state.data._id}</h1>
+                <div>num : {this.state.data.order_num}</div>
+                Date: {this.state.data.created_at}
+                <hr />
+                Book Name: {this.state.book.name}
+                <hr />
+                <form action="/orders/delete" method="post">
+                    <div>
+                        <input type="hidden" name="id" value={this.state.data._id} required />
+                        <input type="submit" value="Delete" />
+                    </div>
+                </form>                
+            </div>
+        )
+    }
+}
+ReactDOM.render(<Show id="<%= params_id %>"  />, document.getElementById('app'));
+</script>
