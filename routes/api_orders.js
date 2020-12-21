@@ -22,12 +22,21 @@ console.log( "page=",  page, page_info );
         var docs= await collection.find({} , limit ).sort({created_at: -1}
                   ).toArray()
 //console.log(docs)
+        var book_ids = LibOrders.get_book_ids(docs)
+//console.log(book_ids)
+        //books
+        var books = []
         const collection_2 = await LibMongo.get_collection_mongo2("books" )
-        var books = await collection_2.find({}).toArray()
+        await collection_2.find(  
+            { _id: {$in : book_ids } }            
+        ).toArray().then((docs) => {
+            books = docs
+//console.log(books);
+        })         
         var order_items = LibOrders.get_order_items(docs , books)
         var t1 = performance.now();
-// console.log(order_items)
-//console.log("Call to function took= " + (t1 - t0) + " milliseconds.");
+//console.log(order_items)
+console.log("Call to function took= " + (t1 - t0) + " milliseconds.");
         var param = LibPagenate.get_page_items(order_items )
         res.json(param);
     } catch (err) {
@@ -43,20 +52,11 @@ router.get('/show/:id', async function(req, res) {
 console.log(req.params.id  );
     try{
         const collection = await LibMongo.get_collection("orders" )
-        collection.aggregate([
-        { $match: { "_id": new ObjectID(req.params.id) } },
-        {
-            $lookup: {
-                from: "books",
-                localField: "book_id",
-                foreignField: "_id",
-                as: "book"
-            }
-        }]).toArray().then((docs) => {
-//console.log(docs[0]);
-            var param = {"docs": docs[0] };
-            res.json(param);
-        })        
+        var where = { _id: new ObjectID(req.params.id) }
+        var order = await collection.findOne(where)         
+console.log(order );        
+        var param = {"docs": order };
+        res.json(param);
     } catch (err) {
         console.log(err);
         res.status(500).send();    

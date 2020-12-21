@@ -44,7 +44,20 @@ export default {
             console.log(e);
             throw new Error('Error , get_bread_ids');
         } 
-    },    
+    }, 
+    get_book_ids :function(items){
+        try{
+            var ret = []
+            items.forEach(async function (item) {
+// console.log( typeof item.book_id )
+                ret.push( item.book_id )
+            });
+            return ret;  
+        } catch (e) {
+            console.log(e);
+            throw new Error('Error , get_bread_ids');
+        }         
+    },
     add_items :async function(items){
         try{
             var book_id = "5fb31ae87068fbef60f9715a"

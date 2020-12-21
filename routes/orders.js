@@ -26,7 +26,7 @@ router.get('/add',async function(req, res, next) {
         const collection = await LibMongo.get_collection_mongo2("books" )
         collection.find({} ).toArray(function(err, result) {
             if (err) throw err;
-            console.log(result);
+//console.log(result);
             res.render('orders/new', {books: result });
         });
     } catch (err) {
